@@ -20,11 +20,11 @@ import static io.vavr.API.*;
 import static io.vavr.Predicates.isIn;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class VavrDemoClassTest {
+class VavrDemoClassTest {
 
     // ### TRY ###
     @Test
-    public void divideVavrTest() {
+    void divideVavrTest() {
         VavrDemoClass vavrDemoClass = new VavrDemoClass();
         Try<Integer> result = vavrDemoClass.divideVavr(12, 0);
 
@@ -33,7 +33,7 @@ public class VavrDemoClassTest {
 
     // ### OPTION ###
     @Test
-    public void optionTest() {
+    void optionTest() {
         Option<Object> noneOption = Option.of(null);
         Option<Object> someOption = Option.of("some option");
 
@@ -43,7 +43,7 @@ public class VavrDemoClassTest {
     }
 
     @Test
-    public void getOrElseTestWithNullObject() {
+    void getOrElseTestWithNullObject() {
         Option<BasicModel> basicModelOption = Option.of(null);
         BasicModel basicModel = basicModelOption.getOrElse(new BasicModel("Something in the way", 1, new ArrayList<>()));
 
@@ -52,7 +52,7 @@ public class VavrDemoClassTest {
     }
 
     @Test
-    public void getOrElseTestWithNotNullObject() {
+    void getOrElseTestWithNotNullObject() {
         Option<BasicModel> basicModelOption = Option.of(new BasicModel("About a girl", 12, new ArrayList<>()));
         BasicModel basicModel = basicModelOption.getOrNull();
 
@@ -73,7 +73,7 @@ public class VavrDemoClassTest {
     }
 
     @Test
-    public void whenCreatesTupleThenCorrect3() {
+    void whenCreatesTupleThenCorrect3() {
         Tuple3<BasicModel, Integer, AnotherBasicModel> myTuple = createTuple3();
         Tuple3<BasicModel, Integer, AnotherBasicModel> updatedTuple = myTuple.update2(555);
 
@@ -94,7 +94,7 @@ public class VavrDemoClassTest {
     // required. Furthermore, the evaluated value is cached or memoized and returned again and again each time it is
     // needed without repeating the computation
     @Test
-    public void givenFunctionWhenEvaluatesWithLazyThenCorrect() {
+    void givenFunctionWhenEvaluatesWithLazyThenCorrect() {
         Lazy<Double> lazy = Lazy.of(Math::random);
         assertFalse(lazy.isEvaluated());
 
@@ -107,7 +107,7 @@ public class VavrDemoClassTest {
 
     // ### PATTERN MATCHING ###
     @Test
-    public void whenMatchworksThenCorrect() {
+    void whenMatchworksThenCorrect() {
         int input = 2;
         String output = Match(input).of(
                 Case($(1), "one"),
@@ -135,9 +135,9 @@ public class VavrDemoClassTest {
         System.out.println("Help me");
     }
 
-    // ### VALIDATIOM
+    // ### VALIDATION
     @Test
-    public void testBasicModelValidationThenCorrect() {
+    void testBasicModelValidationThenCorrect() {
         Tuple3<BasicModel, Integer, AnotherBasicModel> tuple3 = createTuple3();
 
         BasicModel basicModel = tuple3._1;
@@ -178,7 +178,7 @@ public class VavrDemoClassTest {
     // https://www.javadoc.io/static/io.vavr/vavr/1.0.0-alpha-4/io/vavr/collection/Traversable.html
     // Collections in Vavr are immutable
     @Test
-    public void testCollectionThenCorrect() {
+    void testCollectionThenCorrect() {
         io.vavr.collection.List<Integer> intList = io.vavr.collection.List.of(1, 2, 3);
 
         assertEquals(3, intList.length());
