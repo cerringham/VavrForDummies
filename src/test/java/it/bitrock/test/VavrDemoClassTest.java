@@ -1,8 +1,6 @@
 package it.bitrock.test;
 
-import io.vavr.Lazy;
-import io.vavr.Tuple;
-import io.vavr.Tuple3;
+import io.vavr.*;
 import io.vavr.collection.Seq;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -170,7 +168,55 @@ class VavrDemoClassTest {
     }
 
     // ### FUNCTION
+    // Java 8 just provides a Function which accepts one parameter and a BiFunction which accepts two parameters.
+    // Vavr provides functions up to a limit of 8 parameters. The functional interfaces are of called Function0,
+    // Function1, Function2, Function3 and so on.
+    // If you need a function which throws a checked exception you can use CheckedFunction1, CheckedFunction2 and so on.
 
+    @Test
+    void function3TestThenCorrect() {
+        BasicModel basicModel = new BasicModel("", 0, null);
+
+        Function3<String, String, String, String> function3 =
+                Function3.of(basicModel::methodWhichAccepts3Parameters);
+
+        String result = function3.apply("come, ", "as you are, ", "as you were");
+        basicModel.setStringParameter(result);
+        assertEquals("come, as you are, as you were", basicModel.getStringParameter());
+    }
+
+    // Lifting
+    // You can lift a partial function into a total function that returns an Option result.
+    // The term partial function comes from mathematics.
+    // A partial function from X to Y is a function f: X′ → Y, for some subset X′ of X.
+    // It generalizes the concept of a function f: X → Y by not forcing f to map every element of X to an element of Y.
+    // That means a partial function works properly only for some input values.
+    // If the function is called with a disallowed input value, it will typically throw an exception.
+    @Test
+    void liftingTestThenCorrect() {
+        Function2<Integer, Integer, Integer> divide = (a, b) -> a / b;
+
+        Function2<Integer, Integer, Option<Integer>> safeDivide = Function2.lift(divide);
+
+        Option<Integer> i1 = safeDivide.apply(1, 0);
+        Option<Integer> i2 = safeDivide.apply(4, 2);
+
+        assertEquals(None(), i1);
+        assertEquals(Some(2), i2);
+    }
+
+    // Memoization
+    // is a form of caching. A memoized function executes only once and then returns the result from a cache.
+    @Test
+    void memoizationTestThenCorrect() {
+        Function0<Double> hashCache =
+                Function0.of(Math::random).memoized();
+
+        double randomValue1 = hashCache.apply();
+        double randomValue2 = hashCache.apply();
+
+        assertEquals(randomValue1, randomValue2);
+    }
 
     // last but not least ...
     // ### COLLECTION
