@@ -169,6 +169,9 @@ public class VavrDemoClassTest {
                 anotherInvalid.toString());
     }
 
+    // ### FUNCTION
+
+
     // last but not least ...
     // ### COLLECTION
     // https://www.javadoc.io/doc/io.vavr/vavr/latest/index.html
