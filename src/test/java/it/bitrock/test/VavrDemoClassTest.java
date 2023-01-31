@@ -1,7 +1,9 @@
 package it.bitrock.test;
 
 import io.vavr.*;
+import io.vavr.collection.Map;
 import io.vavr.collection.Seq;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
 import io.vavr.control.Validation;
@@ -115,7 +117,7 @@ class VavrDemoClassTest {
 
         assertEquals("two", output);
 
-        String arg = "h";
+        String arg = "-h";
         Match(arg).of(
                 Case($(isIn("-h", "--help")), o -> run(this::displayHelp)),
                 Case($(isIn("-v", "--version")), o -> run(this::displayVersion)),
@@ -218,13 +220,36 @@ class VavrDemoClassTest {
         assertEquals(randomValue1, randomValue2);
     }
 
+    // ### EITHER
+    // Either represents a value of two possible data types.
+    // An Either is either a Left or a Right.
+    // By convention, the Left signifies a failure case result and the Right signifies a success.
+    @Test
+    void testDivisionWithEitherThenCorrect() {
+        VavrDemoClass vavrDemoClass = new VavrDemoClass();
+        Either result = vavrDemoClass.divideEither(12, 2);
+        assertEquals(Boolean.TRUE, result.isRight());
+        assertEquals(Boolean.FALSE, result.isLeft());
+        assertEquals(6, result.get());
+    }
+
+    @Test
+    void testDivisionWithEitherThenNotCorrect() {
+        VavrDemoClass vavrDemoClass = new VavrDemoClass();
+        Either result = vavrDemoClass.divideEither(12, 0);
+        assertEquals(Boolean.FALSE, result.isRight());
+        assertEquals(Boolean.TRUE, result.isLeft());
+        assertEquals(ArithmeticException.class, result.getLeft().getClass());
+    }
+
     // last but not least ...
     // ### COLLECTION
     // https://www.javadoc.io/doc/io.vavr/vavr/latest/index.html
+    // https://www.baeldung.com/vavr-collections
     // https://www.javadoc.io/static/io.vavr/vavr/1.0.0-alpha-4/io/vavr/collection/Traversable.html
     // Collections in Vavr are immutable
     @Test
-    void testCollectionThenCorrect() {
+    void testCollectionListThenCorrect() {
         io.vavr.collection.List<Integer> intList = io.vavr.collection.List.of(1, 2, 3);
 
         assertEquals(3, intList.length());
@@ -233,5 +258,78 @@ class VavrDemoClassTest {
         assertEquals(new Integer(3), intList.get(2));
 
         assertEquals(6, intList.sum().intValue());
+    }
+
+    @Test
+    void testCollectionListMethods() {
+        io.vavr.collection.List<String> list = io.vavr.collection.List.of("Kafka", "Quarkus", "chatGPT", "", "Helicon",
+                "ecc");
+
+        io.vavr.collection.List list1 = list.drop(2);
+        assertFalse(list1.contains("Kafka") && list1.contains("Quarkus"));
+
+        io.vavr.collection.List list2 = list.dropRight(2);
+        assertFalse(list2.contains("ecc") && list2.contains("Helicon"));
+
+        io.vavr.collection.List list3 = list.dropUntil(s -> s.equals("chatGPT"));
+        assertEquals(list3.size(), 4);
+
+        io.vavr.collection.List list4 = list.dropWhile(s -> s.length() > 0);
+        assertEquals(3, list4.size());
+
+        io.vavr.collection.List list5 = list.take(1);
+        assertEquals(list5.single(), "Kafka");
+
+        io.vavr.collection.List list6 = list.takeRight(1);
+        assertEquals(list6.single(), "ecc");
+
+        io.vavr.collection.List list7 = list.takeUntil(s -> s.length() > 6);
+        assertEquals(1, list7.size());
+    }
+
+    @Test
+    void testCollectionListGroupingMethods() {
+        io.vavr.collection.List<String> list = io.vavr.collection.List.of("Java", "Java EE", "Jakarta", "", "JBoss",
+                "C");
+
+        Map<Boolean, io.vavr.collection.List<String>> map = list.groupBy(e -> e.startsWith("J"));
+        assertEquals(2, map.size());
+        assertEquals(map.get(false).get().size(), 2);
+        assertEquals(map.get(true).get().size(), 4);
+    }
+
+    @Test
+    void testCollectionListIntegerMethods() {
+        io.vavr.collection.List<Integer> intList = io.vavr.collection.List.empty();
+
+        io.vavr.collection.List<Integer> intList1 = intList.pushAll(io.vavr.collection.List.rangeClosed(5,10));
+
+        assertEquals(intList1.peek(), Integer.valueOf(10));
+
+        io.vavr.collection.List intList2 = intList1.pop();
+        io.vavr.collection.List intListShuffle = intList1.shuffle();
+        assertEquals(intList2.size(), (intList1.size() - 1) );
+    }
+    
+    // A Stream is an implementation of a lazy linked list and is quite different from java.util.stream.
+    // Unlike java.util.stream, the Vavr Stream stores data and is lazily evaluating next elements.
+    @Test
+    void testStreamThenCorrect() {
+        io.vavr.collection.Stream<Integer> intStream = io.vavr.collection.Stream.iterate(0, i -> i + 1)
+                .take(10);
+
+        assertEquals(10, intStream.size());
+
+        long evenSum = intStream.filter(i -> i % 2 == 0)
+                .sum()
+                .longValue();
+
+        io.vavr.collection.Stream<Integer> s = io.vavr.collection.Stream.of(2,1,3,4);
+
+        io.vavr.collection.Stream<Tuple2<Integer, Integer>> s2 = s.zip(List.of(7,8,9));
+        Tuple2<Integer, Integer> t1 = s2.get(0);
+
+        assertEquals(t1._1().intValue(), 2);
+        assertEquals(t1._2().intValue(), 7);
     }
 }
