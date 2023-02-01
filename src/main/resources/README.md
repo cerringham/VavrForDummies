@@ -21,3 +21,4 @@ Vavr is a functional library for Java 8+ that provides immutable data types and 
 [Official docs](https://docs.vavr.io/#_introduction) <br/>
 [Javadoc](https://www.javadoc.io/doc/io.vavr/vavr/latest/index.html) <br/>
 [Baeldung](https://www.baeldung.com/vavr) <br/>
+[Collections](https://www.baeldung.com/vavr-collections)<br/>

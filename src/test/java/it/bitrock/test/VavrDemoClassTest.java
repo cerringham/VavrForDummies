@@ -63,7 +63,7 @@ class VavrDemoClassTest {
 
     // ### TUPLE ###
     // Tuples are immutable and can hold multiple objects of different types in a type-safe manner
-    // Tuple1, Tuple2 to Tuple8 epending on the number of elements they are to take
+    // Tuple1, Tuple2 to Tuple8 depending on the number of elements they are to take
     private Tuple3 createTuple3() {
         AnotherBasicModel anotherBasicModel = new AnotherBasicModel(5.6f);
         BasicModel basicModel = new BasicModel("The Number of the Beast", 666, List.of(anotherBasicModel));
@@ -174,7 +174,6 @@ class VavrDemoClassTest {
     // Vavr provides functions up to a limit of 8 parameters. The functional interfaces are of called Function0,
     // Function1, Function2, Function3 and so on.
     // If you need a function which throws a checked exception you can use CheckedFunction1, CheckedFunction2 and so on.
-
     @Test
     void function3TestThenCorrect() {
         BasicModel basicModel = new BasicModel("", 0, null);
@@ -331,5 +330,25 @@ class VavrDemoClassTest {
 
         assertEquals(t1._1().intValue(), 2);
         assertEquals(t1._2().intValue(), 7);
+    }
+
+    // An immutable Queue stores elements allowing a first-in-first-out (FIFO) retrieval.
+    // A Queue internally consists of two linked lists, a front List, and a rear List.
+    // The front List contains the elements that are dequeued, and the rear List contains the elements that are enqueued.
+    // This allows enqueue and dequeue operations to perform in O(1).
+    // When the front List runs out of elements, front and rear List's are swapped, and the rear List is reversed.
+    @Test
+    void testQueueThenCorrect() {
+        io.vavr.collection.Queue<Integer> queue = io.vavr.collection.Queue.of(1, 2, 3);
+        io.vavr.collection.Queue<Integer> secondQueue = queue.enqueueAll(List.of(4,5));
+
+        assertEquals(3, queue.size());
+        assertEquals(5, secondQueue.size());
+
+        Tuple2<Integer, io.vavr.collection.Queue<Integer>> result = secondQueue.dequeue();
+        assertEquals(Integer.valueOf(1), result._1);
+
+        io.vavr.collection.Queue<Integer> tailQueue = result._2;
+        assertFalse(tailQueue.contains(secondQueue.get(0)));
     }
 }
