@@ -271,16 +271,16 @@ class VavrDemoClassTest {
         assertFalse(list2.contains("ecc") && list2.contains("Helicon"));
 
         io.vavr.collection.List list3 = list.dropUntil(s -> s.equals("chatGPT"));
-        assertEquals(list3.size(), 4);
+        assertEquals(4, list3.size());
 
         io.vavr.collection.List list4 = list.dropWhile(s -> s.length() > 0);
         assertEquals(3, list4.size());
 
         io.vavr.collection.List list5 = list.take(1);
-        assertEquals(list5.single(), "Kafka");
+        assertEquals("Kafka", list5.single());
 
         io.vavr.collection.List list6 = list.takeRight(1);
-        assertEquals(list6.single(), "ecc");
+        assertEquals("ecc", list6.single());
 
         io.vavr.collection.List list7 = list.takeUntil(s -> s.length() > 6);
         assertEquals(1, list7.size());
@@ -293,8 +293,8 @@ class VavrDemoClassTest {
 
         Map<Boolean, io.vavr.collection.List<String>> map = list.groupBy(e -> e.startsWith("J"));
         assertEquals(2, map.size());
-        assertEquals(map.get(false).get().size(), 2);
-        assertEquals(map.get(true).get().size(), 4);
+        assertEquals(2, map.get(false).get().size());
+        assertEquals(4, map.get(true).get().size());
     }
 
     @Test
