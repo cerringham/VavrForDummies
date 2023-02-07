@@ -3,6 +3,7 @@ package it.bitrock.test;
 import io.vavr.*;
 import io.vavr.collection.Map;
 import io.vavr.collection.Seq;
+import io.vavr.concurrent.Future;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import io.vavr.control.Try;
@@ -354,5 +355,25 @@ class VavrDemoClassTest {
 
         io.vavr.collection.Queue<Integer> tailQueue = result._2;
         assertFalse(tailQueue.contains(secondQueue.get(0)));
+    }
+
+    @Test
+    void futureTest() throws InterruptedException {
+        String initialValue = "One of the best Iron Maiden song in Senjutsu is ";
+        Future<String> resultFuture = Future.of(() -> getIronMaidenSong());
+        String result = resultFuture.getOrElse("");
+        if(result.equals(""))
+            System.out.println(initialValue + "I'm sorry, I don't remember -_-");
+
+        Thread.sleep(6000);
+        result = resultFuture.getOrElse("");
+        if(!result.equals(""))
+            System.out.println(initialValue + result + "You can listen to " + "https://www.youtube.com/watch?v=FiLaLcB7SeM");
+
+    }
+
+    private String getIronMaidenSong() throws InterruptedException {
+        Thread.sleep(5000);
+        return "Day of a future past";
     }
 }
