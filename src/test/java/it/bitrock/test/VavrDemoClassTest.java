@@ -58,7 +58,7 @@ class VavrDemoClassTest {
         BasicModel basicModel = basicModelOption.getOrNull();
 
         assertNotNull(basicModel);
-        // an happy Nirvana song!!!
+        // a happy Nirvana song!!!
         assertEquals("About a girl", basicModel.getStringParameter());
     }
 
