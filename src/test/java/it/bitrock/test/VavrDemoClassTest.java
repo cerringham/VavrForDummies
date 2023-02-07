@@ -252,9 +252,9 @@ class VavrDemoClassTest {
         io.vavr.collection.List<Integer> intList = io.vavr.collection.List.of(1, 2, 3);
 
         assertEquals(3, intList.length());
-        assertEquals(new Integer(1), intList.get(0));
-        assertEquals(new Integer(2), intList.get(1));
-        assertEquals(new Integer(3), intList.get(2));
+        assertEquals(1, intList.get(0));
+        assertEquals(2, intList.get(1));
+        assertEquals(3, intList.get(2));
 
         assertEquals(6, intList.sum().intValue());
     }
@@ -328,8 +328,12 @@ class VavrDemoClassTest {
         io.vavr.collection.Stream<Tuple2<Integer, Integer>> s2 = s.zip(List.of(7,8,9));
         Tuple2<Integer, Integer> t1 = s2.get(0);
 
-        assertEquals(t1._1().intValue(), 2);
-        assertEquals(t1._2().intValue(), 7);
+        assertEquals(2, t1._1().intValue());
+        assertEquals(7, t1._2().intValue());
+        assertEquals(1, s2.get(1)._1);
+        assertEquals(8, s2.get(1)._2);
+        assertEquals(3, s2.get(2)._1);
+        assertEquals(9, s2.get(2)._2);
     }
 
     // An immutable Queue stores elements allowing a first-in-first-out (FIFO) retrieval.
